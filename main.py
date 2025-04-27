@@ -12,6 +12,7 @@ import os
 import datetime as dt
 
 def main_menu() -> str:
+    # displays the main menu of choices
     MENU_PADDING: int = 5
     WIDTH: int = 100
     LOCATION: int = 1
