@@ -8,11 +8,14 @@ DATE STARTED: 04 APR 2025
 DATE FINISHED: -TBA-
 """
 
+import os
+import datetime as dt
+
 def main_menu() -> str:
     MENU_PADDING: int = 5
     WIDTH: int = 100
     LOCATION: int = 1
-    
+
     header(WIDTH, LOCATION)
     print("")
     print(f" " * MENU_PADDING + "MAIN MENU OPTIONS")
@@ -34,10 +37,81 @@ def main_menu() -> str:
     choice = choice.upper()
     return choice
 
-def validate_choice(user_choice: str): 
+def generate_task_id() -> int:
+    id = 1
+    
+    return id
+
+def task_initializer() -> dict:
+    task = {
+        'description': ' ',
+        'status': ' ',
+        'created_at': dt.datetime.now(),
+        'updated_at': 'N/A'
+    }
+
+    return task
+
+def task_status_is(choice: str) -> str:
+    match choice:
+        case 'A':
+            status = "TODO"
+        case 'B':
+            status = 'IN PROGRESS'
+        case 'C':
+            status = 'DONE'
+
+    return status
+
+def input_task(task_records):
+    os.system('cls || clear')
+    records = task_records
+    WIDTH: int = 100
+    LOCATION: int = 2
+    header(WIDTH, LOCATION)
+
+    # generate the task_id
+    task_id = generate_task_id()
+
+    print(f"TASK ID: {task_id}")
+    # initialize a temporary dictionary
+    task = task_initializer()
+
+    # ask for description
+    print("ENTER TASK DESCRIPTION")
+    task_description_input: str = input("-> ")
+
+    print("")
+    print("ENTER TASK STATUS")
+    print("[A]: TODO")
+    print("[B]: IN PROGRESS")
+    print("[C]: DONE")
+    
+    print("")
+    print("ENTER CHOICE")
+    task_status_user_choice: str = input("-> ")
+    task_status_user_choice = task_status_user_choice.upper()
+    task_status = task_status_is(task_status_user_choice)
+
+    print("")
+    is_user_continue = input("Are you sure you want to continue? (Y/N): ")
+    is_user_continue = is_user_continue.upper()
+    
+    match is_user_continue:
+        case 'Y':
+            task.update({
+                'description': task_description_input,
+                'status': task_status,
+                })
+            records.update({task_id:task})
+            return records
+        case 'N':
+            return records
+        
+def validate_choice(user_choice: str, task_records: dict): 
     match user_choice:
         case 'A':
-            pass
+                task_records = input_task(task_records)
         case 'B':
             pass
         case 'C':
@@ -51,6 +125,8 @@ def validate_choice(user_choice: str):
         case _:
             error_validation(error_code=100)
 
+    return task_records
+
 def error_validation(error_code: int):
     match error_code:
         case 100:
@@ -59,7 +135,6 @@ def error_validation(error_code: int):
             
 
 def header(WIDTH: int, LOCATION_CODE: int) -> None:
-
     match LOCATION_CODE: 
         case 1:
             LOCATION = "MAIN MENU"
@@ -82,8 +157,11 @@ def header(WIDTH: int, LOCATION_CODE: int) -> None:
     print(f"." * WIDTH)
 
 def main():
+    task_records = {}
+
     user_choice = main_menu()
-    validate_choice(user_choice)
+    task_records = validate_choice(user_choice, task_records)
+    print(task_records)
 
 if __name__ == '__main__':
     main()
