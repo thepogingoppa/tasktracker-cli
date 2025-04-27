@@ -134,6 +134,7 @@ def validate_choice(user_choice: str, task_records: dict):
     return task_records
 
 def error_validation(error_code: int):
+    # gets the error code and displays the appropriate error message
     match error_code:
         case 100:
             print(f"ERROR {error_code}: Invalid Choice! Choose between A - F")
@@ -141,6 +142,7 @@ def error_validation(error_code: int):
             
 
 def header(WIDTH: int, LOCATION_CODE: int) -> None:
+    # displays the appropriate location for header based on the location code
     match LOCATION_CODE: 
         case 1:
             LOCATION = "MAIN MENU"
