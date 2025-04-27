@@ -39,11 +39,13 @@ def main_menu() -> str:
     return choice
 
 def generate_task_id() -> int:
+    # generates and a new task id
     id = 1
     
     return id
 
 def task_initializer() -> dict:
+    # initializes the dictionary for the task
     task = {
         'description': ' ',
         'status': ' ',
@@ -54,6 +56,7 @@ def task_initializer() -> dict:
     return task
 
 def task_status_is(choice: str) -> str:
+    # gets the task status depending on the user choice
     match choice:
         case 'A':
             status = "TODO"
@@ -65,6 +68,7 @@ def task_status_is(choice: str) -> str:
     return status
 
 def input_task(task_records):
+    # ask the user for the task and task status and stores it in a dictionary
     os.system('cls || clear')
     records = task_records
     WIDTH: int = 100
@@ -110,6 +114,7 @@ def input_task(task_records):
             return records
         
 def validate_choice(user_choice: str, task_records: dict): 
+    # gets the user choice and sends them to the appropriate method
     match user_choice:
         case 'A':
                 task_records = input_task(task_records)
