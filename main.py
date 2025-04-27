@@ -10,6 +10,7 @@ DATE FINISHED: -TBA-
 
 import os
 import datetime as dt
+import json
 
 def main_menu() -> str:
     # displays the main menu of choices
@@ -49,7 +50,7 @@ def task_initializer() -> dict:
     task = {
         'description': ' ',
         'status': ' ',
-        'created_at': dt.datetime.now(),
+        'created_at': '',
         'updated_at': 'N/A'
     }
 
@@ -98,21 +99,27 @@ def input_task(task_records):
     task_status_user_choice = task_status_user_choice.upper()
     task_status = task_status_is(task_status_user_choice)
 
+    task_creation_date = dt.datetime.now()
+    task_creation_date = task_creation_date.strftime("%d %b %Y (%I:%M %p)")
+
     print("")
     is_user_continue = input("Are you sure you want to continue? (Y/N): ")
     is_user_continue = is_user_continue.upper()
+
+    task.update({'description': task_description_input, 'status': task_status})
+    records.update({task_id:task})
     
     match is_user_continue:
         case 'Y':
-            task.update({
-                'description': task_description_input,
-                'status': task_status,
-                })
-            records.update({task_id:task})
+            write_to_file(records)
             return records
         case 'N':
             return records
         
+def write_to_file(records):
+    with open('task_records.json', 'w') as f:
+        json.dump(records, f, indent=2)
+
 def validate_choice(user_choice: str, task_records: dict): 
     # gets the user choice and sends them to the appropriate method
     match user_choice:
@@ -169,7 +176,6 @@ def main():
 
     user_choice = main_menu()
     task_records = validate_choice(user_choice, task_records)
-    print(task_records)
 
 if __name__ == '__main__':
     main()
