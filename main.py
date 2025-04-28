@@ -12,10 +12,11 @@ import os
 import datetime as dt
 import json
 
+WIDTH: int = 150
+
 def main_menu() -> str:
     # displays the main menu of choices
     MENU_PADDING: int = 5
-    WIDTH: int = 100
     LOCATION: int = 1
 
     header(WIDTH, LOCATION)
@@ -86,9 +87,12 @@ def task_status_is(choice: str) -> str:
 
     return status
 
+def system_clear() -> None:
+    os.system('cls || clear')
+
 def input_task(task_records):
     # ask the user for the task and task status and stores it in a dictionary
-    os.system('cls || clear')
+    system_clear()
     records = task_records
     WIDTH: int = 100
     LOCATION: int = 2
@@ -133,7 +137,27 @@ def input_task(task_records):
             return records
         case 'N':
             return records
-        
+
+def display_tasks(task_records):
+    LOCATION: int = 4
+    system_clear()
+    header(WIDTH, LOCATION)
+    table_header()
+    
+    for task in task_records.keys():
+        id = task
+        description = task_records[id]['description']
+        status = task_records[id]['status']
+        creatied_at = task_records[id]['created_at']
+        updated_at = task_records[id]['updated_at']
+
+        print(f"{id:<4}{status:<15}{description:<50}{creatied_at:<25}{updated_at:<25}")
+    input("\nPress ANY KEY to continue...")
+
+def table_header():
+    print(f"{'ID':<4}{'STATUS':<15}{'DESCRIPTION':<50}{'CREATED AT':<25}{'UPDATED AT':<25}")
+
+
 def write_to_file(records):
     with open('task_records.json', 'w') as f:
         json.dump(records, f, indent=2)
@@ -142,13 +166,13 @@ def validate_choice(user_choice: str, task_records: dict):
     # gets the user choice and sends them to the appropriate method
     match user_choice:
         case 'A':
-                task_records = input_task(task_records)
+            task_records = input_task(task_records)
         case 'B':
             pass
         case 'C':
             pass
         case 'D':
-            pass
+            display_tasks(task_records)
         case 'E':
             pass
         case 'F':
@@ -197,9 +221,11 @@ def initialize_dictionary():
     
     return task_records
 def main():
-    task_records = initialize_dictionary()
-    user_choice = main_menu()
-    task_records = validate_choice(user_choice, task_records)
+    while True:
+        system_clear()
+        task_records = initialize_dictionary()
+        user_choice = main_menu()
+        task_records = validate_choice(user_choice, task_records)
 
 if __name__ == '__main__':
     main()

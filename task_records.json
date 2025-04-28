@@ -1,0 +1,32 @@
+{
+  "1": {
+    "description": "get groceries",
+    "status": "TODO",
+    "created_at": "28 Apr 2025 (10:35 AM)",
+    "updated_at": "N/A"
+  },
+  "2": {
+    "description": "get notebooks",
+    "status": "TODO",
+    "created_at": "28 Apr 2025 (10:35 AM)",
+    "updated_at": "N/A"
+  },
+  "3": {
+    "description": "get laundry",
+    "status": "TODO",
+    "created_at": "28 Apr 2025 (10:37 AM)",
+    "updated_at": "N/A"
+  },
+  "4": {
+    "description": "get more milk",
+    "status": "DONE",
+    "created_at": "28 Apr 2025 (10:41 AM)",
+    "updated_at": "N/A"
+  },
+  "5": {
+    "description": "push changes to the repository",
+    "status": "IN PROGRESS",
+    "created_at": "28 Apr 2025 (11:04 AM)",
+    "updated_at": "N/A"
+  }
+}
