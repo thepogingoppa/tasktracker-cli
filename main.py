@@ -162,7 +162,40 @@ def write_to_file(records):
     with open('task_records.json', 'w') as f:
         json.dump(records, f, indent=2)
 
+def filter_by(task_records):
+    LOCATION: int = 8
+    system_clear()
+    header(WIDTH, LOCATION)
+    print("FILTER BY:")
+    print("[A] : TODO")
+    print("[B] : IN PROGRESS")
+    print("[C] : DONE")
+   
+    print("\nEnter choice")
+    choice = input("-> ")
+    choice = choice.upper()
 
+    match choice:
+        case 'A':
+            filter_records(task_records, STATUS='TODO')
+        case 'B':
+            filter_records(task_records, STATUS='IN PROGRESS')
+        case 'C':
+            filter_records(task_records, STATUS='DONE')
+
+def filter_records(task_records, STATUS):
+    system_clear()
+    header(WIDTH, LOCATION_CODE=5)
+    for task in task_records.keys():
+        id = task
+        if task_records[id]['status'] == STATUS:
+            description = task_records[id]['description']
+            status = task_records[id]['status']
+            creatied_at = task_records[id]['created_at']
+            updated_at = task_records[id]['updated_at']
+            print(f"{id:<4}{status:<15}{description:<50}{creatied_at:<25}{updated_at:<25}")
+    input("\nPress ANY KEY to continue...")
+    
 def validate_choice(user_choice: str, task_records: dict): 
     # gets the user choice and sends them to the appropriate method
     match user_choice:
@@ -175,7 +208,7 @@ def validate_choice(user_choice: str, task_records: dict):
         case 'D':
             display_tasks(task_records)
         case 'E':
-            pass
+            filter_by(task_records)
         case 'F':
             exit()
         case _:
@@ -208,6 +241,8 @@ def header(WIDTH: int, LOCATION_CODE: int) -> None:
             LOCATION = "FILTER: TASKS NOT DONE"
         case 7:
             LOCATION = "FILTER: TASKS IN PROGRESS"
+        case 8: 
+            LOCATION = "FILTER BY STATUS"
 
     print(f"." * WIDTH)
     print(f" " * 30 + "TASKMAN - THE CLI-BASED TASK MANAGER")
