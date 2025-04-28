@@ -41,9 +41,27 @@ def main_menu() -> str:
 
 def generate_task_id() -> int:
     # generates and a new task id
-    id = 1
+    
+    if isFileExists() == True:
+        with open('task_records.json') as f:
+            tasks = json.load(f)
+            
+        for task in tasks:
+            keys = list(tasks.keys())
+
+        id = int(keys[len(keys) - 1]) + 1
+    else:
+        id = 1
     
     return id
+
+def isFileExists() -> bool:
+    file_path = "task_records.json"
+
+    if os.path.exists(file_path):
+        return True
+    else:
+        return False
 
 def task_initializer() -> dict:
     # initializes the dictionary for the task
@@ -106,7 +124,7 @@ def input_task(task_records):
     is_user_continue = input("Are you sure you want to continue? (Y/N): ")
     is_user_continue = is_user_continue.upper()
 
-    task.update({'description': task_description_input, 'status': task_status})
+    task.update({'description': task_description_input, 'created_at': task_creation_date, 'status': task_status})
     records.update({task_id:task})
     
     match is_user_continue:
@@ -171,9 +189,15 @@ def header(WIDTH: int, LOCATION_CODE: int) -> None:
     print(f" " * 37 + "YOU ARE IN: ", LOCATION)
     print(f"." * WIDTH)
 
-def main():
+def initialize_dictionary():
     task_records = {}
-
+    if isFileExists():
+        with open('task_records.json') as f:
+            task_records = json.load(f)
+    
+    return task_records
+def main():
+    task_records = initialize_dictionary()
     user_choice = main_menu()
     task_records = validate_choice(user_choice, task_records)
 
