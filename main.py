@@ -162,6 +162,7 @@ def write_to_file(records):
     with open('task_records.json', 'w') as f:
         json.dump(records, f, indent=2)
 
+
 def validate_choice(user_choice: str, task_records: dict): 
     # gets the user choice and sends them to the appropriate method
     match user_choice:
