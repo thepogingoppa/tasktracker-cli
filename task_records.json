@@ -1,21 +1,21 @@
 {
   "1": {
-    "description": "get groceries",
-    "status": "TODO",
+    "description": "get phone from phone shop",
+    "status": "DONE",
     "created_at": "28 Apr 2025 (10:35 AM)",
-    "updated_at": "N/A"
+    "updated_at": "29 Apr 2025 (06:07 PM)"
   },
   "2": {
     "description": "get notebooks",
-    "status": "TODO",
+    "status": "DONE",
     "created_at": "28 Apr 2025 (10:35 AM)",
-    "updated_at": "N/A"
+    "updated_at": "29 Apr 2025 (06:08 PM)"
   },
   "3": {
-    "description": "get laundry",
-    "status": "TODO",
+    "description": "fix laptop",
+    "status": "DONE",
     "created_at": "28 Apr 2025 (10:37 AM)",
-    "updated_at": "N/A"
+    "updated_at": "29 Apr 2025 (06:12 PM)"
   },
   "4": {
     "description": "get more milk",
@@ -25,9 +25,9 @@
   },
   "5": {
     "description": "push changes to the repository",
-    "status": "IN PROGRESS",
+    "status": "DONE",
     "created_at": "28 Apr 2025 (11:04 AM)",
-    "updated_at": "N/A"
+    "updated_at": "29 Apr 2025 (06:15 PM)"
   },
   "6": {
     "description": "study for the exam",

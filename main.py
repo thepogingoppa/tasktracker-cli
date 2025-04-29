@@ -40,6 +40,49 @@ def main_menu() -> str:
     choice = choice.upper()
     return choice
 
+def update_task(task_records):
+    LOCATION: int = 2
+    system_clear()
+    header(WIDTH, LOCATION)
+    table_header()
+    looping_through(task_records)
+
+    choice = (input("\nEnter the ID number of the record you wish to edit: "))
+    for task in task_records.keys():
+        id = task
+        if choice == id:
+            edit_choice(task_records, id)
+            break
+
+def edit_choice(task_records, id):
+    print(f"\nEDITING THE FOLLOWING RECORD")
+    print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
+    print("[1]: DESCRIPTION: ")
+    print("[2]: TASK STATUS: ")
+
+    edit_choice = int(input("\nChoose a record to edit: "))
+    match edit_choice:
+        case 1:
+            print("\nENTER NEW DESCRIPTION")
+            new_description = input("-> ")
+            task_records[id]['description'] = new_description
+        case 2: 
+            new_status = input_status()
+            task_records[id]['status'] = new_status
+
+    sure_choice = input("Are you sure you want to edit records? (Y/N): ")
+    sure_choice = sure_choice.upper()
+
+    match sure_choice:
+        case 'N':
+            return
+        case 'Y':
+            date_today = dt.datetime.now()
+            date_today = date_today.strftime("%d %b %Y (%I:%M %p)")
+            task_records[id]['updated_at'] = date_today
+            write_to_file(task_records)
+            return
+
 def generate_task_id() -> int:
     # generates and a new task id
     
@@ -109,23 +152,12 @@ def input_task(task_records):
     print("ENTER TASK DESCRIPTION")
     task_description_input: str = input("-> ")
 
-    print("")
-    print("ENTER TASK STATUS")
-    print("[A]: TODO")
-    print("[B]: IN PROGRESS")
-    print("[C]: DONE")
-    
-    print("")
-    print("ENTER CHOICE")
-    task_status_user_choice: str = input("-> ")
-    task_status_user_choice = task_status_user_choice.upper()
-    task_status = task_status_is(task_status_user_choice)
+    task_status = input_status()
 
     task_creation_date = dt.datetime.now()
     task_creation_date = task_creation_date.strftime("%d %b %Y (%I:%M %p)")
 
-    print("")
-    is_user_continue = input("Are you sure you want to continue? (Y/N): ")
+    is_user_continue = input("\nAre you sure you want to continue? (Y/N): ")
     is_user_continue = is_user_continue.upper()
 
     task.update({'description': task_description_input, 'created_at': task_creation_date, 'status': task_status})
@@ -137,13 +169,29 @@ def input_task(task_records):
             return records
         case 'N':
             return records
+        
+def input_status():
+    print("\nENTER TASK STATUS")
+    print("[A]: TODO")
+    print("[B]: IN PROGRESS")
+    print("[C]: DONE")
+    
+    print("\nENTER CHOICE")
+    task_status_user_choice: str = input("-> ")
+    task_status_user_choice = task_status_user_choice.upper()
+    task_status = task_status_is(task_status_user_choice)
+
+    return task_status
 
 def display_tasks(task_records):
     LOCATION: int = 4
     system_clear()
     header(WIDTH, LOCATION)
     table_header()
-    
+    looping_through(task_records)
+    input("\nPress ANY KEY to continue...")
+
+def looping_through(task_records):
     for task in task_records.keys():
         id = task
         description = task_records[id]['description']
@@ -152,7 +200,6 @@ def display_tasks(task_records):
         updated_at = task_records[id]['updated_at']
 
         print(f"{id:<4}{status:<15}{description:<50}{creatied_at:<25}{updated_at:<25}")
-    input("\nPress ANY KEY to continue...")
 
 def table_header():
     print(f"{'ID':<4}{'STATUS':<15}{'DESCRIPTION':<50}{'CREATED AT':<25}{'UPDATED AT':<25}")
@@ -202,7 +249,7 @@ def validate_choice(user_choice: str, task_records: dict):
         case 'A':
             task_records = input_task(task_records)
         case 'B':
-            pass
+            update_task(task_records)
         case 'C':
             pass
         case 'D':
