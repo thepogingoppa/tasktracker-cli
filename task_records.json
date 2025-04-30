@@ -1,10 +1,4 @@
 {
-  "1": {
-    "description": "get phone from phone shop",
-    "status": "DONE",
-    "created_at": "28 Apr 2025 (10:35 AM)",
-    "updated_at": "29 Apr 2025 (06:07 PM)"
-  },
   "2": {
     "description": "get notebooks",
     "status": "DONE",
@@ -16,18 +10,6 @@
     "status": "DONE",
     "created_at": "28 Apr 2025 (10:37 AM)",
     "updated_at": "29 Apr 2025 (06:12 PM)"
-  },
-  "4": {
-    "description": "get more milk",
-    "status": "DONE",
-    "created_at": "28 Apr 2025 (10:41 AM)",
-    "updated_at": "N/A"
-  },
-  "5": {
-    "description": "push changes to the repository",
-    "status": "DONE",
-    "created_at": "28 Apr 2025 (11:04 AM)",
-    "updated_at": "29 Apr 2025 (06:15 PM)"
   },
   "6": {
     "description": "study for the exam",

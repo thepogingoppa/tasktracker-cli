@@ -47,7 +47,7 @@ def update_task(task_records):
     table_header()
     looping_through(task_records)
 
-    choice = (input("\nEnter the ID number of the record you wish to edit: "))
+    choice = input("\nEnter the ID number of the record you wish to edit: ")
     for task in task_records.keys():
         id = task
         if choice == id:
@@ -132,6 +132,32 @@ def task_status_is(choice: str) -> str:
 
 def system_clear() -> None:
     os.system('cls || clear')
+
+def delete_task(task_records):
+    LOCATION = 3
+    system_clear()
+    header(WIDTH, LOCATION)
+    table_header()
+    looping_through(task_records)
+    
+    choice = input("\nEnter the ID of the task you wish to remove: ")
+    for task in task_records.keys():
+        id = task
+        if choice == id:
+            delete_this_task(task_records, id)
+            break
+
+def delete_this_task(task_records, id):
+    print("You are DELETING the following record:")
+    print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
+    
+    sure_choice = input("Are you sure you want to delete? This action cannot be undone? (Y/N): ")
+    sure_choice = sure_choice.upper()
+
+    if sure_choice == 'Y':
+        del task_records[id]
+        write_to_file(task_records)
+        input("\nPress ANY KEY to continue...")
 
 def input_task(task_records):
     # ask the user for the task and task status and stores it in a dictionary
@@ -251,7 +277,7 @@ def validate_choice(user_choice: str, task_records: dict):
         case 'B':
             update_task(task_records)
         case 'C':
-            pass
+            delete_task(task_records)
         case 'D':
             display_tasks(task_records)
         case 'E':
