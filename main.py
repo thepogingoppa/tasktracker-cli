@@ -15,7 +15,7 @@ import json
 WIDTH: int = 150
 
 def main_menu() -> str:
-    # displays the main menu of choices
+    # displays the main menu of choices for the program 
     MENU_PADDING: int = 5
     LOCATION: int = 1
 
@@ -46,42 +46,61 @@ def update_task(task_records):
     header(WIDTH, LOCATION)
     table_header()
     looping_through(task_records)
-
-    choice = input("\nEnter the ID number of the record you wish to edit: ")
-    for task in task_records.keys():
-        id = task
-        if choice == id:
-            edit_choice(task_records, id)
-            break
+    
+    while True:
+        try:
+            choice = int(input("\nEnter the ID number of the record you wish to edit: "))
+            if choice < len(task_records) or choice > len(task_records):
+                error_validation(error_code=130)
+            else:
+                choice = str(choice)
+                for task in task_records.keys():
+                    id = task
+                    if choice == id:
+                        edit_choice(task_records, id)
+                        break
+                break
+        except ValueError:
+                error_validation(error_code=120)
 
 def edit_choice(task_records, id):
-    print(f"\nEDITING THE FOLLOWING RECORD")
-    print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
-    print("[1]: DESCRIPTION: ")
-    print("[2]: TASK STATUS: ")
+    while True:
+        print(f"\nEDITING THE FOLLOWING RECORD")
+        print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
+        print("[1]: DESCRIPTION: ")
+        print("[2]: TASK STATUS: ")
 
-    edit_choice = int(input("\nChoose a record to edit: "))
-    match edit_choice:
-        case 1:
-            print("\nENTER NEW DESCRIPTION")
-            new_description = input("-> ")
-            task_records[id]['description'] = new_description
-        case 2: 
-            new_status = input_status()
-            task_records[id]['status'] = new_status
+        edit_choice = int(input("\nChoose a record to edit: "))
+        match edit_choice:
+            case 1:
+                print("\nENTER NEW DESCRIPTION")
+                new_description = input("-> ")
+                task_records[id]['description'] = new_description
+                break
+            case 2: 
+                new_status = input_status()
+                task_records[id]['status'] = new_status
+                break
+            case _: 
+                error_validation(error_code=130)
 
-    sure_choice = input("Are you sure you want to edit records? (Y/N): ")
-    sure_choice = sure_choice.upper()
+    while True:
+        sure_choice = input("\nAre you sure you want to edit records? (Y/N): ")
+        sure_choice = sure_choice.upper()
 
-    match sure_choice:
-        case 'N':
-            return
-        case 'Y':
-            date_today = dt.datetime.now()
-            date_today = date_today.strftime("%d %b %Y (%I:%M %p)")
-            task_records[id]['updated_at'] = date_today
-            write_to_file(task_records)
-            return
+        match sure_choice:
+            case 'N':
+                error_validation(error_code=110)
+                return
+            case 'Y':
+                date_today = dt.datetime.now()
+                date_today = date_today.strftime("%d %b %Y (%I:%M %p)")
+                task_records[id]['updated_at'] = date_today
+                write_to_file(task_records)
+                success_validation(success_code=100)
+                return
+            case _:
+                error_validation(error_code=130)
 
 def generate_task_id() -> int:
     # generates and a new task id
@@ -92,8 +111,11 @@ def generate_task_id() -> int:
             
         for task in tasks:
             keys = list(tasks.keys())
-
-        id = int(keys[len(keys) - 1]) + 1
+        
+        if len(tasks) == 0:
+            id = 1
+        else:
+            id = int(keys[len(keys) - 1]) + 1
     else:
         id = 1
     
@@ -127,6 +149,9 @@ def task_status_is(choice: str) -> str:
             status = 'IN PROGRESS'
         case 'C':
             status = 'DONE'
+        case _:
+            error_validation(error_code=100)
+            return
 
     return status
 
@@ -140,24 +165,42 @@ def delete_task(task_records):
     table_header()
     looping_through(task_records)
     
-    choice = input("\nEnter the ID of the task you wish to remove: ")
-    for task in task_records.keys():
-        id = task
-        if choice == id:
-            delete_this_task(task_records, id)
-            break
+    while True:
+        try:
+            choice = int(input("\nEnter the ID of the task you wish to remove: "))
+            if choice < len(task_records) or choice > len(task_records):
+                error_validation(error_code=130)
+            else:
+                choice = str(choice)
+                for task in task_records.keys():
+                    id = task
+                    if choice == id:
+                        delete_this_task(task_records, id)
+                        break
+                break
+        except ValueError:
+            error_validation(error_code=120)
 
 def delete_this_task(task_records, id):
-    print("You are DELETING the following record:")
-    print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
+    while True:
+        print("You are DELETING the following record:")
+        print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
 
-    sure_choice = input("Are you sure you want to delete? This action cannot be undone? (Y/N): ")
-    sure_choice = sure_choice.upper()
+        sure_choice = input("Are you sure you want to delete? This action cannot be undone? (Y/N): ")
+        sure_choice = sure_choice.upper()
 
-    if sure_choice == 'Y':
-        del task_records[id]
-        write_to_file(task_records)
-        input("\nPress ANY KEY to continue...")
+        match sure_choice:
+            case 'Y':
+                del task_records[id]
+                write_to_file(task_records)
+                success_validation(success_code=100)
+                break
+            case 'N':
+                error_validation(error_code=110)
+                break
+            case _:
+                error_validation(error_code=140)
+    return task_records
 
 def input_task(task_records):
     # ask the user for the task and task status and stores it in a dictionary
@@ -183,7 +226,9 @@ def input_task(task_records):
     task_creation_date = dt.datetime.now()
     task_creation_date = task_creation_date.strftime("%d %b %Y (%I:%M %p)")
 
-    is_user_continue = input("\nAre you sure you want to continue? (Y/N): ")
+    print("You are about to enter the following data record: ")
+    print(f"\n'{task_id}: {task_description_input + ", " + task_status}'\n")
+    is_user_continue = input("Are you sure you want to continue? (Y/N): ")
     is_user_continue = is_user_continue.upper()
 
     task.update({'description': task_description_input, 'created_at': task_creation_date, 'status': task_status})
@@ -192,21 +237,28 @@ def input_task(task_records):
     match is_user_continue:
         case 'Y':
             write_to_file(records)
+            success_validation(success_code=100)
             return records
         case 'N':
+            error_validation(error_code=110)
             return records
+        case _:
+            error_validation(error_code=100)
         
 def input_status():
-    print("\nENTER TASK STATUS")
-    print("[A]: TODO")
-    print("[B]: IN PROGRESS")
-    print("[C]: DONE")
+    while True:
+        print("\nENTER TASK STATUS")
+        print("[A]: TODO")
+        print("[B]: IN PROGRESS")
+        print("[C]: DONE")
+        
+        print("\nENTER CHOICE")
+        task_status_user_choice: str = input("-> ")
+        task_status_user_choice = task_status_user_choice.upper()
+        task_status = task_status_is(task_status_user_choice)
+        if task_status != None:
+            break
     
-    print("\nENTER CHOICE")
-    task_status_user_choice: str = input("-> ")
-    task_status_user_choice = task_status_user_choice.upper()
-    task_status = task_status_is(task_status_user_choice)
-
     return task_status
 
 def display_tasks(task_records):
@@ -255,6 +307,8 @@ def filter_by(task_records):
             filter_records(task_records, STATUS='IN PROGRESS')
         case 'C':
             filter_records(task_records, STATUS='DONE')
+        case _:
+            error_validation(error_code=100)
 
 def filter_records(task_records, STATUS):
     system_clear()
@@ -293,9 +347,26 @@ def error_validation(error_code: int):
     # gets the error code and displays the appropriate error message
     match error_code:
         case 100:
-            print(f"ERROR {error_code}: Invalid Choice! Choose between A - F")
-            input("Press ANY KEY to continue...")
+            print(f"\nERROR {error_code}: Input is only between A - F.")
+        case 110:
+            print(f"\nERROR {error_code}: Process Terminated!")
+        case 120:
+            print(f"\nERROR {error_code}: Input is only numbers.")
+        case 130:
+            print(f"\nERROR {error_code}: Input is out of range.")
+        case 140:
+            print(f"\nERROR {error_code}: Input is only accepts 'Y' or 'N' ")
+
+    
+    input("Press ANY KEY to continue...")
             
+
+def success_validation(success_code: int):
+    match success_code:
+        case 100:
+            print("\nSUCCESS: Records have been added!")
+    
+    input("Press ANY KEY to continue...")
 
 def header(WIDTH: int, LOCATION_CODE: int) -> None:
     # displays the appropriate location for header based on the location code
