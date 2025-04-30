@@ -5,7 +5,7 @@ PROGRAM DESCRIPTION: This is a CLI-based task manager that will ADD, UPDATE, TRA
 DELETE tasks and then store them in a JSON file.
 
 DATE STARTED: 04 APR 2025
-DATE FINISHED: -TBA-
+DATE FINISHED: 30 APR 2025
 """
 
 import os
@@ -150,7 +150,7 @@ def delete_task(task_records):
 def delete_this_task(task_records, id):
     print("You are DELETING the following record:")
     print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
-    
+
     sure_choice = input("Are you sure you want to delete? This action cannot be undone? (Y/N): ")
     sure_choice = sure_choice.upper()
 
