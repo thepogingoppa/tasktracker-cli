@@ -28,10 +28,8 @@ def main_menu() -> str:
     print(f" " * MENU_PADDING + "[C] : DELETE TASK")
     print(f" " * MENU_PADDING + "[D] : DISPLAY ALL TASKS")
     print(f" " * MENU_PADDING + "[E] : FLITER BY STATUS")
-    print(f" " * MENU_PADDING + "[F] : EXIT")
-    print("")
+    print(f" " * MENU_PADDING + "[F] : EXIT\n")
 
-    print("")
     print(f"." * WIDTH)
     print("")
     choice: str = input(f" " * MENU_PADDING + "YOUR CHOICE -> ")
@@ -41,6 +39,7 @@ def main_menu() -> str:
     return choice
 
 def update_task(task_records):
+    # searches through the records and allows the user to edit the description and the status of the task
     LOCATION: int = 2
     system_clear()
     header(WIDTH, LOCATION)
@@ -49,12 +48,13 @@ def update_task(task_records):
     
     while True:
         try:
+            # asks user for their choice
             choice = int(input("\nEnter the ID number of the record you wish to edit: "))
             if choice < len(task_records) or choice > len(task_records):
                 error_validation(error_code=130)
             else:
                 choice = str(choice)
-                for task in task_records.keys():
+                for task in task_records.keys(): # searches within the records and find the task with the same id
                     id = task
                     if choice == id:
                         edit_choice(task_records, id)
@@ -64,6 +64,7 @@ def update_task(task_records):
                 error_validation(error_code=120)
 
 def edit_choice(task_records, id):
+    # asks the user what record to edit
     while True:
         print(f"\nEDITING THE FOLLOWING RECORD")
         print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
@@ -84,6 +85,7 @@ def edit_choice(task_records, id):
             case _: 
                 error_validation(error_code=130)
 
+    # asks for confirmation as to whether to continue with the operation or not
     while True:
         sure_choice = input("\nAre you sure you want to edit records? (Y/N): ")
         sure_choice = sure_choice.upper()
@@ -105,8 +107,8 @@ def edit_choice(task_records, id):
 def generate_task_id() -> int:
     # generates and a new task id
     
-    if isFileExists() == True:
-        with open('task_records.json') as f:
+    if isFileExists() == True: 
+        with open('task_records.json') as f: #initializes the dictionary with the records found
             tasks = json.load(f)
             
         for task in tasks:
@@ -122,6 +124,7 @@ def generate_task_id() -> int:
     return id
 
 def isFileExists() -> bool:
+    # checks if json file exists
     file_path = "task_records.json"
 
     if os.path.exists(file_path):
@@ -156,9 +159,11 @@ def task_status_is(choice: str) -> str:
     return status
 
 def system_clear() -> None:
+    # function to clear contents in the terminal screen
     os.system('cls || clear')
 
 def delete_task(task_records):
+    # searches through the dictionary and deletes the chosen task from the records
     LOCATION = 3
     system_clear()
     header(WIDTH, LOCATION)
@@ -182,6 +187,7 @@ def delete_task(task_records):
             error_validation(error_code=120)
 
 def delete_this_task(task_records, id):
+    # deletes the chosen task
     while True:
         print("You are DELETING the following record:")
         print(f"\n'{id}: {task_records[id]['description'] + ", " + task_records[id]['status']}'\n")
@@ -270,6 +276,7 @@ def display_tasks(task_records):
     input("\nPress ANY KEY to continue...")
 
 def looping_through(task_records):
+    # loops through the dictionary and displays the records in tabular form
     for task in task_records.keys():
         id = task
         description = task_records[id]['description']
@@ -280,14 +287,16 @@ def looping_through(task_records):
         print(f"{id:<4}{status:<15}{description:<50}{creatied_at:<25}{updated_at:<25}")
 
 def table_header():
-    print(f"{'ID':<4}{'STATUS':<15}{'DESCRIPTION':<50}{'CREATED AT':<25}{'UPDATED AT':<25}")
-
+    # prints out the table header
+    print(f"{'ID':<4}{'STATUS':<15}{'DESCRIPTION':<50}{'CREATED AT':<25}{'UPDATED AT':<25}")\
 
 def write_to_file(records):
+    # writes the records to the json file
     with open('task_records.json', 'w') as f:
         json.dump(records, f, indent=2)
 
 def filter_by(task_records):
+    # display the records from the json file but only for a certain status type
     LOCATION: int = 8
     system_clear()
     header(WIDTH, LOCATION)
@@ -311,6 +320,7 @@ def filter_by(task_records):
             error_validation(error_code=100)
 
 def filter_records(task_records, STATUS):
+    # filters the records depending on the status
     system_clear()
     header(WIDTH, LOCATION_CODE=5)
     for task in task_records.keys():
@@ -357,11 +367,10 @@ def error_validation(error_code: int):
         case 140:
             print(f"\nERROR {error_code}: Input is only accepts 'Y' or 'N' ")
 
-    
     input("Press ANY KEY to continue...")
             
-
 def success_validation(success_code: int):
+    # prints the appropriate success message
     match success_code:
         case 100:
             print("\nSUCCESS: Records have been added!")
@@ -394,12 +403,16 @@ def header(WIDTH: int, LOCATION_CODE: int) -> None:
     print(f"." * WIDTH)
 
 def initialize_dictionary():
+    # initializes the dictionary with the records from the json file
     task_records = {}
     if isFileExists():
         with open('task_records.json') as f:
             task_records = json.load(f)
     
     return task_records
+
+
+
 def main():
     while True:
         system_clear()
