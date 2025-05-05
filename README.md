@@ -19,4 +19,4 @@ This is a CLI-based task-tracker made using Python. This is a project made in or
 - Go to the command line and navigate to where the python file is located
 - Type python 'main.py' to the terminal
 
-- Project URL: https://roadmap.sh/projects/task-tracker
+Project URL: https://roadmap.sh/projects/task-tracker
